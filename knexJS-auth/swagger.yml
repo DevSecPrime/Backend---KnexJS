@@ -1,0 +1,179 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: My API
+  description: This is a sample API for user registration.
+
+paths:
+  /api/v1/user/register:
+    post:
+      summary: Register a new user
+      description: This endpoint registers a new user.
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: true
+              properties:
+                name:
+                  type: string
+                  example: "John Doe"
+                email:
+                  type: string
+                  format: email
+                  example: "test123@gmail.com"
+                password:
+                  type: string
+                  example: "1234"
+                phone:
+                  type: string
+                  example: "1234567890"
+                account_type:
+                  type: string
+                  example: "standard"
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: "John Doe"
+                      email:
+                        type: string
+                        format: email
+                        example: "test123@gmail.com"
+                      phone:
+                        type: string
+                        example: "1234567890"
+                      account_type:
+                        type: string
+                        example: "standard"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  message:
+                    type: string
+                    example: "User created successfully...."
+        "400":
+          description: Bad Request - User already exists or input validation failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "User already exists..."
+        "500":
+          description: Internal Server Error - Something went wrong on the server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Internal server error"
+                  message:
+                    type: string
+                    example: "Something went wrong..."
+
+  /api/v1/user/login:
+    post:
+      summary: User Login
+      description: Authenticates a user with email and password and returns a JWT token.
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "test123@gmail.com"
+                  description: "The email address of the user."
+                password:
+                  type: string
+                  format: password
+                  example: "1234"
+                  description: "The password of the user."
+      responses:
+        "200":
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User logged in successfully..."
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: "John Doe"
+                      email:
+                        type: string
+                        example: "test123@gmail.com"
+
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        "400":
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid email or password..."
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Something went wrong..."
+                  error:
+                    type: string
+                    example: "Error details here"
